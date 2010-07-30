@@ -1,0 +1,185 @@
+#!/usr/bin/env ruby
+require "sinatra"
+require "dm-core"
+require "dm-migrations"
+require "digest/sha1"
+require "haml"
+require "rio"
+require "base64"
+require "permutation"
+
+require "ostruct"
+
+require "lib/gtscrypt"
+require "lib/models"
+
+DataMapper.setup(:default, "sqlite:./pokegts.db")
+
+set :port, 80
+enable :sessions
+
+
+DataMapper.auto_upgrade!
+
+helpers do
+
+  def pidgenhash(pid)
+    return Digest::SHA1.hexdigest(pid) 
+  end
+
+  def saverawpkmr(pkm,b64=false)
+    pkm = Base64.decode64(pkm.gsub("-","+").gsub("_","/")) if b64 == true
+    decrypt = GTSCrypt.new pkm
+    data = decrypt.decrypt
+    return data[4..data.size].to_s
+  end
+  
+  def auth
+    redirect "/trainer/login" if session[:pid].nil?
+  end
+  
+end
+
+before do 
+  if request.path_info =~ %r{/pokemondpds/}
+    session[:pid] = params[:pid] unless params[:pid].nil?
+    halt pidgenhash(session[:pid])[0,32] unless params[:hash]
+  end  
+  unless session[:pid].nil?
+    @trainer = Trainer.get(session[:pid])
+    @trainer = Trainer.create(:id=>session[:pid]) if @trainer.nil?
+  end  
+end
+
+get "/" do
+  
+end
+
+get "/trainer/profile" do
+  auth
+  return "<h1> Trainer: #{@trainer.name}" unless @trainer.name.nil?
+  return haml :update_profile
+end
+
+post "/trainer/profile" do
+  auth
+  @trainer.name = params[:name]
+  @trainer.save
+  redirect "/trainer/profile"
+end
+
+get "/trainer/profile/:pid" do
+  return "<h1> Trainer: #{Trainer.get(params[:pid]).name}"
+end
+
+get "/trainer/pokemon" do  
+  html = ""
+  @trainer.monsters.each do |pkm|
+    poke = pkm.structure
+    html << "Personality ID: #{poke.pid}<br>"
+    html << "Database ID: #{pkm.id}<br>"
+    html << "Dex No: #{poke.dex}<br>"
+    html << "Held Item: #{poke.held}<br>"
+    html << "Original Trainer ID: #{poke.otid}<br>"
+    html << "Original Trainer Secret ID: #{poke.otsid}<br>" 
+    html << "Experience: #{poke.exp}<br>"
+    html << "Friendship (Steps if Egg): #{poke.friendship}<br>"
+    html << "Ability: #{poke.ability}<br>" 
+    html << "Markings: #{poke.markings}<br>" 
+    html << "Language: #{poke.language}<br>"
+    html << "HP EV: #{poke.evs[0]}<br>"
+    html << "ATK EV: #{poke.evs[1]}<br>"
+    html << "DEF EV: #{poke.evs[2]}<br>"
+    html << "SPD EV: #{poke.evs[3]}<br>"
+    html << "SATK EV: #{poke.evs[4]}<br>"
+    html << "SDEF EV: #{poke.evs[5]}<br>"
+    html << "EVS: #{poke.evs.inspect}<br>"
+    html << "CS: #{poke.cs.inspect}<br>" 
+    html << "IVS: #{poke.ivs.inspect}<br>"
+    html << "isEgg?: #{poke.egg}<br>"
+    html << "isNicknamed?: #{poke.nicknamed}<br>"
+    html << "Inspection: #{poke.inspect}"
+    pkm.structure = poke
+    pkm.save
+  end unless @trainer.monsters.empty? 
+  html
+end
+
+get "/trainer/login" do
+  haml :login
+end
+
+post "/trainer/login" do
+  session[:pid] = params[:pid]
+  redirect "/trainer/profile"
+end
+
+get "/trainer/pokemon/upload" do
+  haml :upload
+end
+ 
+post "/trainer/pokemon/upload" do
+  auth
+  monster = @trainer.monsters.new
+  monster.blobe = params[:file][:tempfile].read()
+  monster.save
+end
+
+get "/pokemondpds/common/setProfile.asp" do
+  return ("\x00"*8).to_s
+end
+
+get "/pokemondpds/worldexchange/info.asp" do
+  return "\x01\x00"
+end
+
+get "/pokemondpds/worldexchange/result.asp" do
+  data = "\x05\x00" 
+  data = @trainer.monsters.first.blobe unless @trainer.monsters.empty?
+  return data 
+end
+
+get "/pokemondpds/worldexchange/get.asp" do
+  return @trainer.monsters.first.blobe unless @trainer.monsters.empty?
+end
+
+get "/pokemondpds/worldexchange/delete.asp" do
+  @trainer.monsters.first.destroy unless @trainer.monsters.empty?
+  return "\x01\x00"
+end
+
+get "/pokemondpds/worldexchange/post.asp" do
+  pkm = params[:data]  
+  monster = @trainer.monsters.new
+  monster.blobe = saverawpkmr(pkm,true)
+  monster.save
+  return "\x01\x00"
+end
+
+get "/pokemondpds/worldexchange/post_finish.asp" do
+  return "\x01\x00"
+end
+
+__END__
+
+@@upload
+%h1 Upload Pokemans PKM
+%form{:action=>"/trainer/pokemon/upload",:method=>'post',:enctype=>"multipart/form-data"}
+  %input{:type => "file",:name => "file"}
+  %br
+  %input{:type => "submit",:value => "Upload"}
+  
+@@login
+%h1 Login
+%form{:action=>"/trainer/login",:method=>'post'}
+  %input{:type => "text",:name => "pid"}
+  %br
+  %input{:type => "submit",:value => "Login"}
+  
+@@update_profile
+%h1 Update Profile Data
+%form{:action=>"/trainer/profile",:method=>'post'}
+  %input{:type => "text",:name => "name"}
+  %br
+  %input{:type => "submit",:value => "Login"}
+  
