@@ -1,0 +1,95 @@
+$BGC: #0A0A0D
+
+*
+  position: relative
+
+a
+  color: white
+  &:hover
+    color: lightgreen
+
+body
+  margin: 0px
+  padding: 20px
+  margin-left: 50px
+  background: $BGC
+  text-align: justify
+  font: 12px "Fixed", Arial, Helvetica, sans-serif
+  color: #DCFFDC
+  z-index: 0
+  
+
+h1, h2, h3
+  font: 1.82em
+  font-weight: normal
+  font-family: Arial, Helvetica, sans-serif
+  color: #FFFFFF
+  text-align: left
+
+input
+  border: 0
+  font: 12px "Fixed", Arial, Helvetica, sans-serif
+
+input.form
+  margin-bottom: 5px
+
+  
+.pokemon
+  padding-bottom: 20px
+  height: 200px 
+  p.alt, input.alt
+    background-color: lighten($BGC, 10%)
+  p, input
+    background-color: $BGC
+    padding: 2px
+    padding-right: 10px  
+  .header
+    img
+      margin-left: 40px
+      height: 92px
+    width: 11%
+    display: block
+    position: relative
+    float: left
+    background-color: lighten($BGC,10%)
+    text-align: left
+  .box, .body
+    input
+      text-align: right
+      z-index: 10
+    display: block
+    position: relative
+    margin-left: 11%
+    .col, .colh, .subh, .stat
+      float: left
+      text-align: right
+    .colh
+      font-weight: bold
+    .stat
+      min-width: 60px
+      input
+        max-width: 64px
+        margin-left: -33px
+    .subh
+      color: red
+      font-weight: bold
+      font-size: 13px
+      padding-top: 0px
+      z-index: 100
+    .col
+      min-width: 150px
+      input
+        width: 150px
+        margin-left: -100px
+      
+p, ol
+  margin: 0
+
+#new_post
+  position: absolute
+  top: 1em
+  right: 1em
+  padding: 7px 2px
+  a
+    border: 1px dotted
+    padding: 5px

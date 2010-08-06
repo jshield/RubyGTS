@@ -1,0 +1,10 @@
+%html
+  %head
+    %title= "GTS server on #{`hostname`}"
+    %link{:href => "/css/main", :rel => "stylesheet", :type => "text/css"}/
+  %body
+    %h1 Upload Pokemans PKM
+    %form{:action=>"/trainer/pokemon/upload",:method=>'post',:enctype=>"multipart/form-data"}
+      %input{:type => "file",:name => "file"}
+      %br
+      %input{:type => "submit",:value => "Upload"}

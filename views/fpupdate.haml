@@ -1,0 +1,7 @@
+%h1 Update Profile Data
+%form{:action=>"/trainer/#{@trainer.tid}/profile",:method=>'post'}
+  %input{:type => "text",:name => "name",:value=>"Trainer ID"}
+  %br
+  %input{:type => "password",:name => "pass", :value => "Password"}
+  %br  
+  %input{:type => "submit",:value => "Update"}

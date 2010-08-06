@@ -1,0 +1,19 @@
+%html
+  %head
+    %title= "GTS server on #{`hostname`}"
+    %link{:href => "/css/main", :rel => "stylesheet", :type => "text/css"}/
+    %script{:src=> "http://code.jquery.com/jquery-latest.min.js"}
+    :javascript
+      $(document).ready(function(){
+        $('.login').focus();
+        });
+  %body
+    %h1 Login
+    %form{:action=>"/trainer/login",:method=>'post'}
+      %label Trainer ID:
+      %input.form.login{:type => "text",:name => "login"}
+      %br
+      %label Password:
+      %input.form.pass{:type => "password",:name => "pass"}
+      %br
+      %input{:type => "submit",:value => "Login"}
