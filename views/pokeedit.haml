@@ -33,6 +33,7 @@
       - poke = @pkm.structure
       .header
         %p.attr#dex.alt= "##{poke.dex}"
+        %input.pid.attr{:value=>poke.pid, :onchange=>"update_stat('pid',$(this).val());"}
         %img#picon{:src=>poke.image}
         %input.attr#name.alt{:value=>poke.nickname,:onchange=>"update_stat('nickname',$(this).val());"}
         %p= poke.trainer

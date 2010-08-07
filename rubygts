@@ -297,7 +297,7 @@ get "/pokemondpds/worldexchange/post.asp" do
     @trainer.reg = true
     @trainer.save
   end
-  monster.send = true    
+  monster.queue = true
   monster.save
   return "\x01\x00"
 end
