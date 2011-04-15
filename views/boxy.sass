@@ -1,0 +1,109 @@
+.boxy-wrapper
+  position: absolute
+  &.fixed
+    position: fixed
+
+
+.boxy-modal-blackout
+  position: absolute
+  background-color: black
+  left: 0
+  top: 0
+
+
+.boxy-wrapper
+  empty-cells: show
+
+  .top-left, .top-right, .bottom-right, .bottom-left
+    width: 10px
+    height: 10px
+    padding: 0 
+
+
+.boxy-wrapper
+  .top-left
+    background: url('/i/boxy-nw.png')
+
+  .top-right
+    background: url('/i/boxy-ne.png')
+
+  .bottom-right
+    background: url('/i/boxy-se.png')
+
+  .bottom-left
+    background: url('/i/boxy-sw.png')
+
+
+.boxy-wrapper
+  .top-left
+    #filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/i/boxy-nw.png')
+    -ms-filter: "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/i/boxy-nw.png')"
+
+  .top-right
+    #filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/i/boxy-ne.png')
+    -ms-filter: "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/i/boxy-ne.png')"
+
+  .bottom-right
+    #filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/i/boxy-se.png')
+    -ms-filter: "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/i/boxy-se.png')"
+
+  .bottom-left
+    #filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/i/boxy-sw.png')
+    -ms-filter: "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/i/boxy-sw.png')"
+
+  .top, .bottom
+    height: 10px
+    background-color: black
+    opacity: 0.6
+    filter: alpha(opacity=60)
+    padding: 0 
+
+  .left, .right
+    width: 10px
+    background-color: black
+    opacity: 0.6
+    filter: alpha(opacity=60)
+    padding: 0 
+
+  .title-bar
+    background-color: black
+    padding: 6px
+    position: relative
+
+    &.dragging
+      cursor: move
+
+    h2
+      font-size: 12px
+      color: white
+      line-height: 1
+      margin: 0
+      padding: 0
+      font-weight: normal
+
+    .close
+      color: white
+      position: absolute
+      top: 6px
+      right: 6px
+      font-size: 90%
+      line-height: 1
+
+
+.boxy-inner
+  overflow: hidden
+  background-color: #262626
+  padding: 0 
+
+
+.boxy-content
+  padding: 15px
+
+
+.boxy-wrapper
+  .question
+    width: 350px
+    min-height: 80px
+
+  .answers
+    text-align: right

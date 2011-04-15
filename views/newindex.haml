@@ -1,0 +1,28 @@
+!!!
+%html{:dir => "ltr", :xmlns => "http://www.w3.org/1999/xhtml"}
+  %head
+    %meta{:content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}/
+    %title= "RubyGTS"
+    %link{:href => "/css/general.css", :media => "screen", :rel => "stylesheet", :type => "text/css"}/
+    %link{:href => "/css/boxy", :media => "screen", :rel => "stylesheet", :type => "text/css"}/
+  %body
+    #main
+      - unless auth?
+        .icon{:id=>"login",:style=>"background: transparent url(/i/terminal.png) no-repeat scroll center 4px;left: 32px; top: 32px",:ondblclick=>"document.location.href='/trainer/login';"}
+          .name= "Login"
+      - if auth?
+        - i = 0
+        - @trainer.monsters.each do |poke|
+          .icon{:id=>poke.structure.nickname+"-"+poke.id.to_s,:style=>"background: transparent url(/i/pokeball.png) no-repeat scroll center 4px;left: 32px; top: #{32+i*96}px;",:ondblclick=>"document.location.href='#{poke.url}';"}
+            .name= poke.structure.nickname
+          - i+=1
+        #bill.icon{:style=>"background: transparent url(/i/mipc.png) no-repeat scroll center 4px;right: 32px; top: 32px"}
+          .name= "Bill's PC"
+        #upload.icon{:style=>"background: transparent url(/i/upload.png) no-repeat scroll center 4px;right: 32px; top: 128px"}
+          .name= "Upload"
+      #taskbar
+        #start RubyGTS
+        #clock 00:00:00
+    %script{:src => "http://jqueryjs.googlecode.com/files/jquery-1.2.6.min.js", :type => "text/javascript"}
+    %script{:src => "js/core.js", :type => "text/javascript"}
+    %script{:src => "js/jquery.boxy.js", :type => "text/javascript"}

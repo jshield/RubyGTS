@@ -18,13 +18,18 @@
           if (data > 510){
               $("p.evt").css("background","red");
             } else {
-              $("p.evt").css("background","lightgreen");
+              $("p.evt").css("background","green");
             };
         });
       };
       function update_iv(number,value){
         $.post("/system/pokemon/"+$(".pokemon").attr("id")+"/iv",{n: number, v: value}, function(data){
           $("p.ivt").text(data);
+          if (data > 186){
+              $("p.ivt").css("background","red");
+            } else {
+              $("p.ivt").css("background","green");
+            };
         });
         }
   %body
@@ -40,7 +45,7 @@
         %input.attr#exp.alt{:value=>poke.exp, :onchange=>"update_stat('exp',$(this).val());"}
         %p.level= poke.level
         %p.sex= "#{poke.sex}"
-        %p.alt= poke.nature
+        %p.alt= poke.nature.name
         %input#pokemon.attr{:value=>poke.name}
         %input#item.alt{:value=>poke.helditem}
       .body        
@@ -51,9 +56,9 @@
           %p.alt HP
           %p Attack
           %p.alt Defence
+          %p Special Attack
+          %p.alt Special Defence
           %p Speed
-          %p.alt Special Attack
-          %p Special Defence
           %p.alt Total
         .stat
           %p.alt.subh IVs
@@ -73,13 +78,26 @@
               %input.ev.attr{:id=>"#{i}",:value=>evs[i],:onchange=>"update_ev(#{i},$(this).val());"}
             %br
           %p.evt.alt= "#{evs[0] + evs[1] + evs[2] + evs[3] + evs[4] + evs[5]}"
+        .stat
+          %p.alt.subh BSs
+          %input.bs.attr.alt{:id=>"0",:value=>poke.maxhp}
+          %br
+          - 5.times do |i|
+            - if (i+1).even?
+              %input.bs.attr.alt{:id=>"#{i+1}",:value=>poke.bstat(i+1)}
+            - else
+              %input.bs.attr{:id=>"#{i+1}",:value=>poke.bstat(i+1)}
+            %br
         .col
           %p.alt.subh Moves
           - poke.moves.size.times do |i|
+            - move = Move.first(:id=>poke.moves[i])
+            - move = move.name unless move.nil?
+            - move = "None" if move.nil? 
             - if i.even?
-              %input.move.attr.alt{:id=>"#{i}",:value=>Move.get(poke.moves[i]).name}
+              %input.move.attr.alt{:id=>"#{i}",:value=>move}
             - else
-              %input.move.attr{:id=>"#{i}",:value=>Move.get(poke.moves[i]).name}
+              %input.move.attr{:id=>"#{i}",:value=>move}
             %br
     %br
     #new_post
@@ -88,7 +106,6 @@
         %a{:href=>"/trainer/#{@pkm.trainer.tid}/pokemon/#{@pkm.id}/offer"} Offer
         |
         %a{:href=>"/trainer/#{@pkm.trainer.tid}/pokemon/#{@pkm.id}/send"} Send
-        %a{:href=>"/trainer/#{@pkm.trainer.tid}/pokemon/#{@pkm.id}/edit"} Edit
         %a{:href=>"/trainer/#{@pkm.trainer.tid}/pokemon/#{@pkm.id}/delete"} Delete
         |
       - if auth?

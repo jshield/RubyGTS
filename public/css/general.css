@@ -1,0 +1,106 @@
+@CHARSET "UTF-8";
+/******* GENERAL RESET *******/
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em,
+font, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody,
+ tfoot, thead, tr, th, td {
+border:0pt none;
+font-family:inherit;
+font-size: 100%;
+font-style:inherit;
+font-weight:inherit;
+margin:0pt;
+padding:0pt;
+vertical-align:baseline;
+}
+body{
+	background: #fff;
+	line-height:14px;
+	font-size: 11px;
+	font-family: Tahoma, Arial,  Verdana, Helvetica, sans-serif;
+	margin:0pt;
+	overflow: hidden;
+	cursor: default !Important;
+}
+html,body{
+	height:100%;
+}
+.clear{
+	clear: both;
+	height: 0;
+	visibility: hidden;
+	display: block;
+}
+a{
+	text-decoration: none;
+}
+/******* GENERAL RESET *******/
+/******* MAIN *******/
+#main{
+	height: 100%;
+	background: transparent url(/i/background.jpg) no-repeat scroll center center;
+	overflow: none;
+}
+/******* /MAIN  *******/
+/******* ICONS *******/
+#main div.icon{
+	min-width: 80px;
+	min-height: 48px;
+	padding: 0px 14px 8px;
+	border: 1px solid transparent;
+	margin: 0pt auto;
+	text-align: left;
+	position: absolute;
+	display: none;
+}
+#main div.icon:hover{
+	background-color: #0a2c5e !Important;
+	border: 1px solid #3b567e;
+}
+#main div.icon.active{
+	background-color: #0a2c5e !Important;
+	border: 1px solid #3b567e;
+}
+#main div.icon div.name{
+        font-size: 14px;
+	margin-top: 52px;
+	text-align: center;
+	color: #fff;
+}
+/******* /ICONS  *******/
+
+/******* TASKBAR  *******/
+#main #taskbar{
+	width: 100%;
+	height: 42px;
+	line-height: 42px;
+	background: #e6e6e6 url(/i/taskbar.jpg) repeat-x left top;
+	position: absolute;
+	left: 0;
+	bottom: 0px;
+	padding: 4px 0px 1px 0px;
+	display: none;
+}
+#main #taskbar #start{
+	float: left;
+	background: transparent url(/i/start.png) no-repeat 4px -3px;
+	width: 64px;
+	margin: 0 4px 0 0;
+	padding: 0 2px 0 42px;
+	font-size: 18px;
+	font-style: italic;
+	font-weight: 700;
+	text-align: center;
+}
+#main #taskbar #start:hover{
+	background-color: #fff;
+}
+#main #taskbar #clock{
+	float: right;
+	background: #e6e6e6 url(/i/clock.jpg) no-repeat 4px center;
+	padding: 0 8px 0 50px;
+	font-size: 12px;
+	border-left: 2px solid #f9f9f9;
+	font-weight: 700;
+	text-align: center;
+}
+/******* /TASKBAR  *******/

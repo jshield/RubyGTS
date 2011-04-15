@@ -3,8 +3,8 @@
     %title= "GTS server on #{`hostname`}"
     %link{:href => "/css/main", :rel => "stylesheet", :type => "text/css"}/     
   %body
-    - @trainer.monsters.each do |pokemon|   
-      %a{:href => "/trainer/#{@trainer.tid}/pokemon/#{pokemon.id}"}= pokemon.structure.nickname 
+    - @profile.monsters.each do |pokemon|
+      %a{:href => "/trainer/#{@profile.tid}/pokemon/#{pokemon.id}"}= pokemon.structure.nickname
       - if pokemon.queue
         = "| Pending"
       - else

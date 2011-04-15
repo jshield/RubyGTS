@@ -4,7 +4,12 @@
     %link{:href => "/css/main", :rel => "stylesheet", :type => "text/css"}/     
   %body
     %p= "Pokemon held on Server: " + Monster.count.to_s
+    %p= "Pokemon waiting to be deployed: " + Monster.all(:queue=> true).count.to_s
     %p= "Trainers on Server: " + Trainer.count.to_s
+    %h3= "Latest Uploaded Pokemon"
+    - Monster.last(5).each do |poke|
+      %a{:href=>"/trainer/#{poke.trainer.tid}/pokemon/#{poke.id}"}= poke.structure.nickname
+      %br
   #new_post
     - if auth?
       %a{:href => "/trainer/#{@trainer.tid}/profile"} Profile    

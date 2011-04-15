@@ -12,6 +12,19 @@ class Pokemon
   property :form, String, :field => "forme_name"
 end
 
+class PokemonStat
+  include DataMapper::Resource
+  def self.default_repository_name
+    :pokedex
+  end
+
+  storage_names[:pokedex] = "pokemon_stats"
+
+  property :pokemon_id, Integer, :key => true
+  property :stat_id, Integer, :key => true
+  property :base_stat, Integer
+end
+
 class Item
   include DataMapper::Resource
   def self.default_repository_name
@@ -42,6 +55,16 @@ class Nature
 
   property :id, Serial
   property :name, String
+  property :statd, Integer, :field => "decreased_stat_id"
+  property :stati, Integer, :field => "increased_stat_id"
+
+  def dstat
+    return self.statd-1
+  end
+
+  def istat
+    return self.stati-1
+  end
 end
 
 class EvolutionChain

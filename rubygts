@@ -23,7 +23,7 @@ DataMapper.setup(:default, "sqlite:./pokegts.db")
 DataMapper.setup(:pokedex, "sqlite:./pokedex.db")
 
 
-set :port, 8080
+set :port, 4569
 enable :sessions
 
 
@@ -68,8 +68,6 @@ before do
     halt pidgenhash(session[:pid])[0,32] unless params[:hash]
   end
   unless params[:t].nil?
-    @trainer = Trainer.first(:id=>params[:t])
-    @trainer = Trainer.first(:name=>params[:t]) if @trainer.nil?
     @trainer = Trainer.first(:tid=>params[:t]) if @trainer.nil?
   else
     @trainer = Trainer.first(:id=>session[:pid])
@@ -99,12 +97,16 @@ get "/" do
   haml :index
 end
 
+get '/new' do
+  haml :newindex
+end
+
 get "/system/search/:model" do
   Kernel.const_get(params[:model].classify).all(:name.like=>"%#{params[:term]}%").to_json
 end
 
 get "/trainer/:t/profile" do
-  auth
+  @profile = Trainer.first(:tid=>params[:t])
   return haml :profile unless @trainer.name.nil?
   haml :fpupdate
 end
@@ -243,7 +245,7 @@ end
 
 post "/trainer/login" do
   @trainer = Trainer.first(:tid=>params[:login])
-  session[:pid] = @trainer.id unless @trainer.nil? if @trainer.pass == params[:pass]
+  session[:pid] = @trainer.id if @trainer.pass == params[:pass] unless @trainer.nil? 
   redirect "/trainer/login" if session[:pid].nil? 
   redirect "/trainer/#{@trainer.tid}/profile"
 end

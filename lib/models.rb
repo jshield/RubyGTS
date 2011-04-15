@@ -85,11 +85,11 @@ class PokeStruct
   end
 
   def natid
-    return (@pkm[0] % 25)
+    return (self.pid % 25)
   end
 
   def nature
-    return Nature.first(:id=>self.natid).name
+    return Nature.first(:id=>self.natid)
   end
 
   def dex
@@ -105,7 +105,7 @@ class PokeStruct
   end
   
   def image
-    return "/i/pokemon/#{"shiny" if self.shiny?}/#{self.dex}.png"
+    return "/i/pokemon/#{"shiny/" if self.shiny?}#{self.dex}.png"
   end
   
   def held
@@ -181,11 +181,29 @@ class PokeStruct
   end
   
   def evs
-    return @pkm[12..17]
+    ev = @pkm[12..17]
+    ev[3],ev[5] = ev[5],ev[3]
+    return ev
   end
   
   def evs=(v)
+    v[5],v[3] = v[5],v[3]
     @pkm[12..17] = v[0..5]
+  end
+  
+  def base(i)
+    return PokemonStat.first(:pokemon_id=>self.dex,:stat_id=>i+1).base_stat
+  end
+
+  def maxhp
+    return ((((ivs[0])+(2*base(0))+(evs[0]>>2))*level)/100)+10+level;
+  end
+
+  def bstat(i)
+    stat = ((((ivs[i])+(2*base(i))+(evs[i]>>2))*level)/100)+5;
+    stat *= 0.90 if nature.dstat == i
+    stat *= 1.10 if nature.istat == i
+    return stat
   end
   
   def cs
@@ -226,11 +244,13 @@ class PokeStruct
     6.times do |i|
       iv << (riv[i*5..i*5+4]).to_i(2)
     end
+    iv[3],iv[5] = iv[5],iv[3]
     return iv
   end
   
   def ivs=(v)
     riv = ""
+    v[3],v[5] = v[5],v[3]
     6.times do |i|
       riv << v[i].to_s(2).padleft(5)
     end
@@ -385,6 +405,10 @@ class Monster
   def encrypt
    shuffled = self.reciprocal_crypt(self.shuffle((self.pkm),false))
    return shuffled.pack("LS*")
+  end
+
+  def url
+    return "/trainer/#{self.trainer.tid}/pokemon/#{self.id}"
   end
   
   def reciprocal_crypt(words)
