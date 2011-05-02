@@ -442,13 +442,22 @@ class Monster
   end
 end
 
+class User
+  include DataMapper::Resource
+  property :id, Serial
+  property :fbid, Integer, :unique => true
+  property :name, String
+  property :pass, BCryptHash, :default => "default"
+  has n, :trainers
+end
+
 class Trainer
   include DataMapper::Resource
   property :id, Serial
   property :tid, Integer
   property :name, String
-  property :pass, BCryptHash, :default => "default"
   property :reg, Boolean, :default => false
   has n, :monsters
+  belongs_to :user
 end
 
