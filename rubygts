@@ -22,7 +22,7 @@ DataMapper.setup(:default, "sqlite:./pokegts.db")
 DataMapper.setup(:pokedex, "sqlite:./pokedex.db")
 
 
-set :port, 4569
+set :port, 80
 enable :sessions
 
 
