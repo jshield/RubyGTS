@@ -8,7 +8,6 @@ require "extlib"
 require "digest/sha1"
 require "haml"
 require "sass"
-require "rio"
 require "base64"
 require "permutation"
 
@@ -75,12 +74,14 @@ before do
 end
 
 get "/system/initialize" do
-  promo = Trainer.first_or_create(:id=>1,:name=>"PROMO",:tid=>1)
-  promo.reg = true
+  promo = User.first_or_create(:id=>1,:name=>"PROMO")
   promo.save
+  trainer = promo.trainers.first_or_create(:id=>1,:name=>"PROMO")
+  trainer.reg = true
+  trainer.save
   rio('pkm').files('*.pkm') do |data|
     pkm = ""
-    monster = promo.monsters.new
+    monster = trainer.monsters.new
     data >> pkm
     pkm << open("./extra").read() if pkm.size == 236
     monster.blob = pkm
