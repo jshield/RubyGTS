@@ -453,7 +453,7 @@ class User
   property :pass, BCryptHash, :default => "default"
   has n, :trainers  
   def current 
-    return self.trainers.all(self.ctid).first
+    return self.trainers.all(:id=>self.ctid).first
   end
 end
 
