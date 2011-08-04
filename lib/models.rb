@@ -451,12 +451,10 @@ class User
   property :ctid, Integer
   property :name, String
   property :pass, BCryptHash, :default => "default"
-  
+  has n, :trainers  
   def current 
-    return self.trainers.first(self.ctid)
+    return self.trainers.all(self.ctid).first
   end
-  
-  has n, :trainers
 end
 
 class Trainer
