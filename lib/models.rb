@@ -451,6 +451,11 @@ class User
   property :ctid, Integer
   property :name, String
   property :pass, BCryptHash, :default => "default"
+  
+  def current 
+    return self.trainers.first(self.ctid)
+  end
+  
   has n, :trainers
 end
 
@@ -463,6 +468,11 @@ class Trainer
   property :complete, Boolean, :default => false
   property :reg, Boolean, :default => false
   has n, :monsters
+  
+  def profile
+    return "/trainer/#{self.id}/profile"
+  end
+  
   belongs_to :user
 end
 

@@ -44,7 +44,7 @@ before do
     @user.name = @profile["name"]
     @user.fbat = session['access_token']
     @user.save
-    @trainer = @user.trainers.first(:id=>@user.ctid) unless @user.ctid.nil?
+    @trainer = @user.current unless @user.current.nil?
     end
   if request.path_info =~ %r{/pokemondpds/}
     session[:pid] = params[:pid] unless params[:pid].nil?
@@ -114,15 +114,7 @@ post "/trainer/register" do
     halt "Pokemon data did not match"
   end
   @graph.put_wall_post("just registered #{@registrant.name} on the GTS Server","link"=>GTS.url+"trainer/#{registrant.id}/profile");
-  redirect "/trainer/#{@registrant.id}/profile"
-end
-
-post "/trainer/:t/profile" do
-  auth
-  @trainer.name = params[:name]
-  @trainer.pass = params[:pass] unless params[:pass].nil?
-  @trainer.save
-  redirect "/trainer/#{@trainer.id}/profile"
+  redirect @registrant.profile
 end
 
 get "/trainer/:t/pokemon/:p" do  
@@ -140,7 +132,7 @@ get "/trainer/:t/pokemon/:p/delete" do
   if @trainer.id == @pkm.trainer.id
     @pkm.destroy
   end
-  redirect "/trainer/#{@trainer.id}/profile"
+  redirect @trainer.profile
 end
 
 post "/system/pokemon/:p/ev" do
@@ -230,6 +222,8 @@ end
 get "/trainer/switch/:n" do
   auth
   @user.ctid = params[:n] unless @user.trainers.first(params[:n]).nil?
+  @user.save
+  redirect @user.current.profile
 end
 
 get "/trainer/login" do
