@@ -3,9 +3,11 @@
     %title= "GTS server on #{GTS.url}"
     %link{:href => "/css/main", :rel => "stylesheet", :type => "text/css"}/     
   %body
+    %h2= @trainer.name
     %h3= "Belongs to: #{@trainer.user.name}"
+    %h3= "Generation: #{@trainer.gen}th"
     - @trainer.monsters.each do |pokemon|
-      %a{:href => "/trainer/#{@trainer.id}/pokemon/#{pokemon.id}"}= "#{pokemon.structure.nickname} the LV.#{pokemon.structure.level} #{pokemon.structure.nature.name} #{pokemon.structure.name}"
+      %a{:href => pokemon.url}= "#{pokemon.structure.nickname} the LV.#{pokemon.structure.level} #{pokemon.structure.nature.name} #{pokemon.structure.name}"
       - if pokemon.queue
         = "| Pending"
       - else

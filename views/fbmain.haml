@@ -11,7 +11,7 @@
     %h3= "Registered Trainers"    
     - unless @user.trainers.empty?
       - @user.trainers.each do |trainer|
-        %a{:href=>"/trainer/#{trainer.id}/profile"}= trainer.name
+        %a{:href=>trainer.profile}= trainer.name
         - if trainer.id == @user.ctid
           = " [active]"
         - else

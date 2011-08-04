@@ -13,7 +13,7 @@
     %p= "Users Registered on Server: " + User.all(:id.gt=>2).count.to_s
     %h3= "Latest Registered Trainers"
     - Trainer.all(:id.gt=>1,:reg=>true).reverse.last(5).each do |user|
-      %a{:href=>"/trainer/#{user.id}/profile"}= user.name
+      %a{:href=>user.profile}= user.name
       %br      
     %h3= "Latest Registered User Accounts"
     - User.all(:id.gt=>2).reverse.last(5).each do |user|
@@ -22,7 +22,7 @@
     %h3= "Latest Uploaded Pokemon"
     - Monster.all(:trainer_id.gt => 2).reverse.each do |pokemon|
       - if pokemon.trainer.reg
-        %a{:href=>"/trainer/#{pokemon.trainer.id}/pokemon/#{pokemon.id}"}= "#{pokemon.structure.nickname} the LV.#{pokemon.structure.level} #{pokemon.structure.nature.name} #{pokemon.structure.name}"
+        %a{:href=>pokemon.profile}= "#{pokemon.structure.nickname} the LV.#{pokemon.structure.level} #{pokemon.structure.nature.name} #{pokemon.structure.name}"
         %br
   #new_post
     = haml :main_menu

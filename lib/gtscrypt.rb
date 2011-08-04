@@ -1,12 +1,12 @@
 class GTSCrypt
   attr_accessor :data, :seed, :pkm, :oldseed
 
-  def initialize(data)
+  def initialize(data, seed = 0x4a3b2c1d)
     @data = data
     obf_key_blob = @data[0..3]
     @pkm = @data[4..@data.size]
     obf_key, = obf_key_blob.unpack('N')
-    @seed = obf_key ^ 0x4a3b2c1d
+    @seed = obf_key ^ seed
     @seed = @seed | (@seed << 16)
     @oldseed = @seed    
   end

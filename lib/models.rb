@@ -463,6 +463,7 @@ class Trainer
   property :tid, Integer
   property :tsid, Integer
   property :name, String
+  property :gen, Integer, :default => 4
   property :complete, Boolean, :default => false
   property :reg, Boolean, :default => false
   has n, :monsters

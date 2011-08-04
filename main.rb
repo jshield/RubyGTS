@@ -46,21 +46,33 @@ before do
     @user.save
     @trainer = @user.current unless @user.current.nil?
     end
-  if request.path_info =~ %r{/pokemondpds/}
-    session[:pid] = params[:pid] unless params[:pid].nil?
-    @trainer = Trainer.first_or_create(:id=>session[:pid])
-    @trainer.user_id = User.first(:name=>"Pokemon Keeper").id if @trainer.user_id.nil?   
-    halt pidgenhash(session[:pid])[0,32] unless params[:hash]
-    unless @trainer.user.fbat.nil?
-      @graph = Facebook::GraphAPI.new(@trainer.user.fbat)
-      @profile = @graph.get_object("me") 
-    end
-  end
   unless params[:t].nil?
     @trainer = Trainer.first(:tid=>params[:t]) if @trainer.nil?
   else
     @trainer = Trainer.first(:id=>session[:pid]) if @trainer.nil?
   end  
+end
+
+before "/pokemondpds/*" do
+  session[:pid] = params[:pid] unless params[:pid].nil?
+  @trainer = Trainer.first_or_create(:id=>session[:pid])
+  @trainer.user_id = User.first(:name=>"Pokemon Keeper").id if @trainer.user_id.nil?   
+  halt pidgenhash(session[:pid])[0,32] unless params[:hash]
+  unless @trainer.user.fbat.nil?
+    @graph = Facebook::GraphAPI.new(@trainer.user.fbat)
+    @profile = @graph.get_object("me") 
+  end
+end
+
+before "syachi2ds/web/*" do
+  session[:pid] = params[:pid] unless params[:pid].nil?
+  @trainer = Trainer.first_or_create(:id=>session[:pid], :gen => 5)
+  @trainer.user_id = User.first(:name=>"Pokemon Keeper").id if @trainer.user_id.nil?   
+  halt pidgenhash(session[:pid])[0,32] unless params[:hash]  
+  unless @trainer.user.fbat.nil?
+    @graph = Facebook::GraphAPI.new(@trainer.user.fbat)
+    @profile = @graph.get_object("me") 
+  end
 end
 
 get "/css/:css" do
@@ -203,20 +215,20 @@ end
 get "/trainer/:t/pokemon/:p/send" do
   auth
   @pkm = @trainer.monsters.first(:id=>params[:p])
-  redirect "/trainer/#{@trainer.id}/profile" if @pkm.nil?
+  redirect @trainer.profile if @pkm.nil?
   @pkm.queue = true
   @pkm.save
-  redirect "/trainer/#{@pkm.trainer.id}/pokemon/#{@pkm.id}"
+  redirect @pkm.url
 end
 
 get "/trainer/:t/pokemon/:p/give/:n" do
   auth
   @pkm = @trainer.monsters.first(:id=>params[:p])
   halt unless @trainer.id == @pkm.trainer.id
-  redirect "/trainer/#{@trainer.id}/profile" if @pkm.nil?
+  redirect @trainer.profile if @pkm.nil?
   @pkm.trainer = Trainer.first(:id=>params[:n])
   @pkm.save
-  redirect "/trainer/#{@pkm.trainer.id}/pokemon/#{@pkm.id}"
+  redirect @pkm.url
 end
 
 get "/trainer/switch/:n" do
@@ -246,13 +258,13 @@ post "/trainer/pokemon/upload" do
   pkm << open("./extra").read() if pkm.size == 236
   monster.blob = pkm
   monster.save
-  redirect "/trainer/#{@trainer.id}/pokemon/#{monster.id}"
+  redirect monster.url
 end
 
 get "/trainer/pokemon/:p/download" do
   auth
   @monster = Monster.get(params[:p])
-  redirect "/trainer/#{@monster.trainer.id}/pokemon/#{@monster.id}" unless @monster.trainer.id == @trainer.id
+  redirect @monster.url unless @monster.trainer.id == @trainer.id
   content_type "application/octet-stream"
   attachment "#{@monster.trainer.id}-#{@monster.structure.name}.pkm"
   @monster.blob[0..235]
