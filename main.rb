@@ -91,62 +91,6 @@ get "/system/search/:model" do
   Kernel.const_get(params[:model].capitalize).all(:name.like=>"%#{params[:term]}%").to_json
 end
 
-get "/trainer/:t/profile" do
-  @trainer = Trainer.first(:id=>params[:t])
-  return haml :profile unless @trainer.name.nil?
-  haml :fpupdate
-end
-
-get "/trainer/:t/profile/update" do
-  auth
-  haml :fpupdate
-end
-
-get "/trainer/register" do
-  auth
-  haml :trreg
-end
-
-post "/trainer/register" do
-  auth
-  @registrant = Trainer.first(:tid=>params[:tid])
-  halt "Trainer Not Found" if @registrant.nil?
-  halt "Trainer already registered" if @registrant.reg  
-  @monster = @registrant.monsters.first
-  halt "How the hell? It seems that you have not uploaded a pokemon yet you have trainer data on the server" if @monster.nil? 
-  if @monster.structure.nature.name == params[:nature] && @monster.structure.level == params[:level].to_i
-    @registrant.user = @user
-    if @user.ctid.nil?
-      @user.ctid = @registrant.id
-      @user.save
-    end
-    @registrant.reg = true        
-    @registrant.save   
-  else
-    halt "Pokemon data did not match"
-  end
-  @graph.put_wall_post("just registered #{@registrant.name} on the GTS Server","link"=>GTS.url+"trainer/#{registrant.id}/profile");
-  redirect @registrant.profile
-end
-
-get "/trainer/:t/pokemon/:p" do  
-  @pkm = Trainer.first(:id=>params[:t]).monsters.first(:id=>params[:p])
-  if @pkm.trainer.id == @trainer.id
-    haml :pokeedit
-  else
-    haml :pokemon
-  end
-end
-
-get "/trainer/:t/pokemon/:p/delete" do
-  auth
-  @pkm = @trainer.monsters.first(:id=>params[:p])
-  if @trainer.id == @pkm.trainer.id
-    @pkm.destroy
-  end
-  redirect @trainer.profile
-end
-
 post "/system/pokemon/:p/ev" do
   auth
   monster = Monster.get(params[:p])
@@ -198,9 +142,9 @@ post "/system/pokemon/:p/edit" do
   halt unless @trainer.id == monster.trainer.id
   poke = monster.structure
   begin
-  m = poke.method(params[:m]+"=")
+    m = poke.method(params[:m]+"=")
   rescue NameError
-  halt "no such method called #{params[:m]}"
+    halt "no such method called #{params[:m]}"
   end
   m.call(params[:v])
   monster.structure = poke
@@ -238,15 +182,6 @@ get "/trainer/switch/:n" do
   redirect @user.current.profile
 end
 
-get "/trainer/login" do
-  haml :flogin
-end
-
-get "/trainer/logout" do
-  session[:pid] = nil
-  redirect "/"
-end
-
 get "/trainer/pokemon/upload" do
   haml :fpkmupload
 end
@@ -268,4 +203,54 @@ get "/trainer/pokemon/:p/download" do
   content_type "application/octet-stream"
   attachment "#{@monster.trainer.id}-#{@monster.structure.name}.pkm"
   @monster.blob[0..235]
+end
+
+get "/trainer/:t/profile" do
+  @trainer = Trainer.first(:id=>params[:t])
+  return haml :profile
+end
+
+get "/trainer/register" do
+  auth
+  haml :trreg
+end
+
+post "/trainer/register" do
+  auth
+  @registrant = Trainer.first(:tid=>params[:tid])
+  halt "Trainer Not Found" if @registrant.nil?
+  halt "Trainer already registered" if @registrant.reg  
+  @monster = @registrant.monsters.first
+  halt "How the hell? It seems that you have not uploaded a pokemon yet you have trainer data on the server" if @monster.nil? 
+  if @monster.structure.nature.name == params[:nature] && @monster.structure.level == params[:level].to_i
+    @registrant.user = @user
+    if @user.ctid.nil?
+      @user.ctid = @registrant.id
+      @user.save
+    end
+    @registrant.reg = true        
+    @registrant.save   
+  else
+    halt "Pokemon data did not match"
+  end
+  @graph.put_wall_post("just registered #{@registrant.name} on the GTS Server","link"=>GTS.url+"trainer/#{registrant.id}/profile");
+  redirect @registrant.profile
+end
+
+get "/trainer/:t/pokemon/:p" do  
+  @pkm = Trainer.first(:id=>params[:t]).monsters.first(:id=>params[:p])
+  if @pkm.trainer.id == @trainer.id
+    haml :pokeedit
+  else
+    haml :pokemon
+  end
+end
+
+get "/trainer/:t/pokemon/:p/delete" do
+  auth
+  @pkm = @trainer.monsters.first(:id=>params[:p])
+  if @trainer.id == @pkm.trainer.id
+    @pkm.destroy
+  end
+  redirect @trainer.profile
 end

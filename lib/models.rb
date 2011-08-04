@@ -322,6 +322,10 @@ class PokeStruct
     @pkm[39] = f.reverse.to_i(2)
   end
   
+  def female? 
+    return true if self.sex == "Female"
+  end
+  
   def nickname
     if self.nicknamed? == 1
       return self.from_pokechar(@pkm[44])
