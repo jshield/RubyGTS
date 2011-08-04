@@ -22,7 +22,7 @@
     %h3= "Latest Uploaded Pokemon"
     - Monster.all(:trainer_id.gt => 2).reverse.each do |pokemon|
       - if pokemon.trainer.reg
-        %a{:href=>pokemon.profile}= "#{pokemon.structure.nickname} the LV.#{pokemon.structure.level} #{pokemon.structure.nature.name} #{pokemon.structure.name}"
+        %a{:href=>pokemon.url}= "#{pokemon.structure.nickname} the LV.#{pokemon.structure.level} #{pokemon.structure.nature.name} #{pokemon.structure.name}"
         %br
   #new_post
     = haml :main_menu
