@@ -14,6 +14,8 @@
         %a{:href=>"/trainer/#{trainer.id}/profile"}= trainer.name
         - if trainer.id == @user.ctid
           = " [active]"
+        - else
+          %a{:href=>"/trainer/switch/#{trainer.id}"}= " [switch]"
         %br
     %hr
     %a{:href=>"/trainer/register"} Register New Trainer

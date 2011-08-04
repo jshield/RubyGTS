@@ -227,6 +227,11 @@ get "/trainer/:t/pokemon/:p/give/:n" do
   redirect "/trainer/#{@pkm.trainer.id}/pokemon/#{@pkm.id}"
 end
 
+get "/trainer/switch/:n" do
+  auth
+  @user.ctid = params[:n] unless @user.trainers.first(params[:n]).nil?
+end
+
 get "/trainer/login" do
   haml :flogin
 end
