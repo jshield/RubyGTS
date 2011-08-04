@@ -1,18 +1,15 @@
 %html
   %head
-    %title= "GTS server on #{`hostname`}"
+    %title= "GTS server on #{GTS.url}"
     %link{:href => "/css/main", :rel => "stylesheet", :type => "text/css"}/     
   %body
-    - @profile.monsters.each do |pokemon|
-      %a{:href => "/trainer/#{@profile.tid}/pokemon/#{pokemon.id}"}= pokemon.structure.nickname
+    %h3= "Belongs to: #{@trainer.user.name}"
+    - @trainer.monsters.each do |pokemon|
+      %a{:href => "/trainer/#{@trainer.id}/pokemon/#{pokemon.id}"}= "#{pokemon.structure.nickname} the LV.#{pokemon.structure.level} #{pokemon.structure.nature.name} #{pokemon.structure.name}"
       - if pokemon.queue
         = "| Pending"
       - else
         = "| Sent"
       %br
   #new_post
-    - if auth?   
-      %a{:href => "/trainer/pokemon/upload"} Upload
-      %a{:href => "/trainer/logout"} Logout   
-    - else 
-      %a{:href => "/trainer/login"} Login
+    = haml :main_menu

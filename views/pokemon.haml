@@ -3,6 +3,12 @@
     %title= @pkm.structure.nickname
     %link{:href => "/css/main", :rel => "stylesheet", :type => "text/css"}/
     %link{:href => "/css/ui-darkness/jquery-ui-1.8.2.custom.css", :rel => "stylesheet", :type => "text/css"}/
+    %meta{:property=>"og:title", :content=>"#{@pkm.structure.trainer.join.to_s}'s #{@pkm.structure.nickname} the #{@pkm.structure.nature.name} #{@pkm.structure.name}"}
+    %meta{:property=>"og:url", :content=>request.url}
+    %meta{:property=>"og:type", :content=>"game"}
+    %meta{:property=>"og:image", :content=>GTS.url+@pkm.structure.image}
+    %meta{:property=>"og:site_name", :content=>"Ruby Global Trade Station"}
+    %meta{:property=>"fb:admins", :content=>"1250352398"}
     %script{:src=> "http://code.jquery.com/jquery-latest.min.js"}
     %script{:src=> "http://gts.daedulus.net/js/jquery-ui-1.8.2.custom.min.js"}
   %body
@@ -12,9 +18,9 @@
       .header
         %p.attr.dex.alt= "##{poke.dex}"
         %p.level= poke.level
-        %img#picon{:src=>poke.image}
+        %img#picon{:src=>GTS.url+poke.image}
         %p.attr.name.alt= poke.nickname
-        %p= poke.trainer
+        %p= poke.trainer.join.to_s
         %p.attr.exp.alt= "#{poke.exp}"
         %p.sex= "#{poke.sex}"
         %p.alt= poke.nature.name
@@ -59,9 +65,9 @@
             - else
               %p.move.attr{:id=>"mv#{i}"}= move
     %br
+    %br
+    %br
+    %br	
+    %iframe{:allowtransparency => "true", :frameborder => "0", :scrolling => "no", :src => "http://www.facebook.com/plugins/like.php?href=#{URI.escape request.url, Regexp.new("[^#{URI::PATTERN::UNRESERVED}]")}", :style => "height: 62px; width: 100%"}
     #new_post 
-      - if auth?
-        %a{:href => "/trainer/#{@trainer.tid}/profile"} Profile
-        %a{:href => "/trainer/logout"} Logout   
-      - else 
-        %a{:href => "/trainer/login"} Login              
+      = haml :main_menu              

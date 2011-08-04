@@ -39,7 +39,7 @@
       .header
         %p.attr#dex.alt= "##{poke.dex}"
         %input.pid.attr{:value=>poke.pid, :onchange=>"update_stat('pid',$(this).val());"}
-        %img#picon{:src=>poke.image}
+        %img#picon{:src=>GTS.url+poke.image}
         %input.attr#name.alt{:value=>poke.nickname,:onchange=>"update_stat('nickname',$(this).val());"}
         %p= poke.trainer
         %input.attr#exp.alt{:value=>poke.exp, :onchange=>"update_stat('exp',$(this).val());"}
@@ -78,16 +78,6 @@
               %input.ev.attr{:id=>"#{i}",:value=>evs[i],:onchange=>"update_ev(#{i},$(this).val());"}
             %br
           %p.evt.alt= "#{evs[0] + evs[1] + evs[2] + evs[3] + evs[4] + evs[5]}"
-        .stat
-          %p.alt.subh BSs
-          %input.bs.attr.alt{:id=>"0",:value=>poke.maxhp}
-          %br
-          - 5.times do |i|
-            - if (i+1).even?
-              %input.bs.attr.alt{:id=>"#{i+1}",:value=>poke.bstat(i+1)}
-            - else
-              %input.bs.attr{:id=>"#{i+1}",:value=>poke.bstat(i+1)}
-            %br
         .col
           %p.alt.subh Moves
           - poke.moves.size.times do |i|
@@ -101,15 +91,13 @@
             %br
     %br
     #new_post
-      - if @pkm.trainer.id == session[:pid]
-        %a{:href=>"/trainer/#{@pkm.trainer.tid}/pokemon/#{@pkm.id}/give"} Give
-        %a{:href=>"/trainer/#{@pkm.trainer.tid}/pokemon/#{@pkm.id}/offer"} Offer
+      - if @pkm.trainer.id == @trainer.id
+        %a{:href=>"/trainer/#{@pkm.trainer.id}/pokemon/#{@pkm.id}/give"} Give
+        %a{:href=>"/trainer/#{@pkm.trainer.id}/pokemon/#{@pkm.id}/offer"} Offer
         |
-        %a{:href=>"/trainer/#{@pkm.trainer.tid}/pokemon/#{@pkm.id}/send"} Send
-        %a{:href=>"/trainer/#{@pkm.trainer.tid}/pokemon/#{@pkm.id}/delete"} Delete
+        %a{:href=>"/trainer/#{@pkm.trainer.id}/pokemon/#{@pkm.id}/send"} Send
+        %a{:href=>"/trainer/#{@pkm.trainer.id}/pokemon/#{@pkm.id}/delete"} Delete
         |
-      - if auth?
-        %a{:href => "/trainer/#{@trainer.tid}/profile"} Profile
-        %a{:href => "/trainer/logout"} Logout   
-      - else 
-        %a{:href => "/trainer/login"} Login              
+        %a{:href=>"/trainer/pokemon/#{@pkm.id}/download"} Download
+        |
+      = haml :main_menu

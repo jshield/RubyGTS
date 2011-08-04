@@ -1,3 +1,4 @@
+# encoding: BINARY
 class PokePRNG
 
   def initialize(seed)
@@ -45,7 +46,7 @@ class PokeStruct
         break
       end
     end
-    return string.to_s
+    return string
   end
   
   def to_pokechar(str)
@@ -105,7 +106,7 @@ class PokeStruct
   end
   
   def image
-    return "/i/pokemon/#{"shiny/" if self.shiny?}#{self.dex}.png"
+    return "i/pokemon/#{"shiny/" if self.shiny?}#{self.dex}.png"
   end
   
   def held
@@ -408,7 +409,7 @@ class Monster
   end
 
   def url
-    return "/trainer/#{self.trainer.tid}/pokemon/#{self.id}"
+    return "/trainer/#{self.trainer.id}/pokemon/#{self.id}"
   end
   
   def reciprocal_crypt(words)
@@ -446,6 +447,8 @@ class User
   include DataMapper::Resource
   property :id, Serial
   property :fbid, Integer, :unique => true
+  property :fbat, Object
+  property :ctid, Integer
   property :name, String
   property :pass, BCryptHash, :default => "default"
   has n, :trainers
@@ -455,7 +458,9 @@ class Trainer
   include DataMapper::Resource
   property :id, Serial
   property :tid, Integer
+  property :tsid, Integer
   property :name, String
+  property :complete, Boolean, :default => false
   property :reg, Boolean, :default => false
   has n, :monsters
   belongs_to :user

@@ -1,0 +1,10 @@
+- if auth?
+  - unless @user.trainers.empty?
+    %a{:href => "/trainer/pokemon/upload"} Upload
+    %a{:href => "/trainer/#{@trainer.id}/profile"}= @trainer.name + "'s Profile"    
+    %a{:href => "/fb"} User Profile
+    |
+  %a{:href => "/fb/logout"} Logout 
+- else 
+  %a{:href => "/fb/login"} Login
+%a{:href => "/"} Home

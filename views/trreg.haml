@@ -1,0 +1,24 @@
+%html
+  %head
+    %title= "GTS server on #{`hostname`}"
+    %link{:href => "/css/main", :rel => "stylesheet", :type => "text/css"}/
+    %script{:src=> "http://code.jquery.com/jquery-latest.min.js"}
+    :javascript
+      $(document).ready(function(){
+        $('.tid').focus();
+        });
+  %body
+    %h1 Trainer Registration
+    %p Once you have successfully deposited a Pokemon on the GTS system you can use this form to register a trainer with your facebook account 
+    %br
+    %form.registration{:action=>"/trainer/register",:method=>'post'}
+      %label{:for=>"tid"} Trainer ID:
+      %input.form.tid{:type => "text",:name => "tid"}
+      %br
+      %label{:for=>"nature"}Nature:
+      %input.form.nature{:type => "text",:name => "nature"}
+      %br
+      %label{:for=>"level"}Level:
+      %input.form.level{:type => "text",:name => "level"}
+      %br      
+      %input.form{:type => "submit",:value => "Register"}

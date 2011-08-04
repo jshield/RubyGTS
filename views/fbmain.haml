@@ -1,0 +1,23 @@
+%html
+  %head
+    %title= "GTS server on #{request.host}"
+    %link{:href => "/css/main", :rel => "stylesheet", :type => "text/css"}/     
+  %body
+    %h3= "Welcome #{@user.name} to the GTS Server on #{request.host}"
+    %p= "To make full use of this server you need to first upload a pokemon that your trainer caught from a 4th gen cartridge such as DPP/HGSS"
+    %p= "Details on connecting from your DS to the server will follow shortly."
+    %p= "Instructions are coming soon: however at the moment you can log in and look at existing pokemon that have been uploaded by other users."
+    %br
+    %h3= "Registered Trainers"    
+    - unless @user.trainers.empty?
+      - @user.trainers.each do |trainer|
+        %a{:href=>"/trainer/#{trainer.id}/profile"}= trainer.name
+        - if trainer.id == @user.ctid
+          = " [active]"
+        %br
+    %hr
+    %a{:href=>"/trainer/register"} Register New Trainer
+    %br           
+  #new_post
+    = haml :main_menu
+ 

@@ -9,11 +9,11 @@
         });
   %body
     %h1 Login
-    %form{:action=>"/trainer/login",:method=>'post'}
-      %label Trainer ID:
+    %form.login{:action=>"/trainer/login",:method=>'post'}
+      %label{:for=>"login"} Trainer ID:
       %input.form.login{:type => "text",:name => "login"}
       %br
-      %label Password:
+      %label{:for=>"pass"} Password:
       %input.form.pass{:type => "password",:name => "pass"}
       %br
       %input{:type => "submit",:value => "Login"}

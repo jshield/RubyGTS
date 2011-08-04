@@ -1,3 +1,11 @@
 pokegts.db
 *.redcar
 *.lock
+*.sass-cache
+*.project
+*.bundle
+facebook
+gts.settings.rb
+log
+doc
+tmp

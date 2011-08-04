@@ -1,4 +1,4 @@
-$BGC: #0A0A0D
+$BGC: #0A0A0F
 
 *
   position: relative
@@ -30,10 +30,23 @@ input
   border: 0
   font: 12px "Fixed", Arial, Helvetica, sans-serif
   background-color: white
-
+  align: right
+    
 input.form
   margin-bottom: 5px
   
+form.login
+  border: 1px solid #999
+  max-width: 300px
+  
+label
+  clear: left
+  display: block
+  float: left
+  text-align: right
+  width: 100px
+  padding-right: 5px
+
 .pokemon
   padding-bottom: 20px
   height: 200px 
@@ -42,10 +55,11 @@ input.form
   p, input
     background-color: $BGC
     padding: 2px
-    padding-right: 10px  
+    padding-right: 10px
+    color: white  
   .header
     img
-      margin-left: 40px
+
       height: 92px
     width: 11%
     display: block
