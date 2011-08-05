@@ -7,9 +7,13 @@ class Pokemon
   storage_names[:pokedex] = "pokemon"
   
   property :id, Serial
-  property :name, String, :field => "identifier"
+  property :identifier, String
   property :chain, Integer, :field => "evolution_chain_id"
   property :form, String, :field => "forme_name"
+  
+  def name
+    return PokemonName.first(:pokemon_id=>self.id,:local_language_id=>"9").name
+  end
 end
 
 class PokemonStat
@@ -23,6 +27,20 @@ class PokemonStat
   property :pokemon_id, Integer, :key => true
   property :stat_id, Integer, :key => true
   property :base_stat, Integer
+end
+
+class PokemonName
+  include DataMapper::Resource
+  def self.default_repository_name
+    :pokedex
+  end
+
+  storage_names[:pokedex] = "pokemon_names"
+
+  property :pokemon_id, Integer, :key => true
+  property :local_language_id, Integer, :key => true
+  property :name, String
+  
 end
 
 class Item
