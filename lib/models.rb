@@ -86,7 +86,7 @@ class PokeStruct
   end
 
   def natid
-    return (self.pid % 25)
+    return (self.pid % 25) + 1
   end
 
   def nature
