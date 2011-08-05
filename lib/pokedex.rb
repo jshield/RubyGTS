@@ -43,6 +43,22 @@ class PokemonName
   
 end
 
+class PokemonName
+  include DataMapper::Resource
+  def self.default_repository_name
+    :pokedex
+  end
+
+  storage_names[:pokedex] = "nature_names"
+
+  property :nature_id, Integer, :key => true
+  property :local_language_id, Integer, :key => true
+  property :name, String
+  
+end
+
+
+
 class Item
   include DataMapper::Resource
   def self.default_repository_name
@@ -72,9 +88,13 @@ class Nature
   storage_names[:pokedex] = "natures"
 
   property :id, Serial
-  property :name, String, :field => "identifier"
+  property :identifier, String
   property :statd, Integer, :field => "decreased_stat_id"
   property :stati, Integer, :field => "increased_stat_id"
+
+  def name
+    return NatureName.first(self.id).name
+  end
 
   def dstat
     return self.statd-1

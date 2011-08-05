@@ -1,4 +1,5 @@
 # encoding: BINARY
+@@nmap = [1,6,21,11,17,2,7,22,12,18,5,10,25,16,20,3,8,23,13,15,4,9,24,14,19]
 class PokePRNG
 
   def initialize(seed)
@@ -86,11 +87,12 @@ class PokeStruct
   end
 
   def natid
-    return (self.pid % 25) + 1
+    nid = (self.pid % 25)
+    
   end
 
   def nature
-    return Nature.first(:id=>self.natid)
+    return Nature.first(:id=>@@nmap[self.natid])
   end
 
   def dex
