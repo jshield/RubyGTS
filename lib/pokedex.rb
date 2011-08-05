@@ -43,7 +43,7 @@ class PokemonName
   
 end
 
-class PokemonName
+class NatureName
   include DataMapper::Resource
   def self.default_repository_name
     :pokedex
@@ -93,7 +93,7 @@ class Nature
   property :stati, Integer, :field => "increased_stat_id"
 
   def name
-    return NatureName.first(self.id).name
+    return NatureName.first(:nature_id=>self.id,:local_language_id=>9).name
   end
 
   def dstat
