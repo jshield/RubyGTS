@@ -7,7 +7,7 @@ class Pokemon
   storage_names[:pokedex] = "pokemon"
   
   property :id, Serial
-  property :name, String
+  property :name, String, :field => "identifier"
   property :chain, Integer, :field => "evolution_chain_id"
   property :form, String, :field => "forme_name"
 end
@@ -32,7 +32,7 @@ class Item
   end
   
   property :id, Serial
-  property :name, String
+  property :name, String, :field => "identifier"
 end
 
 class Move
@@ -42,7 +42,7 @@ class Move
   end
   
   property :id, Serial
-  property :name, String
+  property :name, String, :field => "identifier"
 end
 
 class Nature
@@ -54,7 +54,7 @@ class Nature
   storage_names[:pokedex] = "natures"
 
   property :id, Serial
-  property :name, String
+  property :name, String, :field => "identifier"
   property :statd, Integer, :field => "decreased_stat_id"
   property :stati, Integer, :field => "increased_stat_id"
 

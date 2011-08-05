@@ -4,7 +4,9 @@ unless File.basename($0) == "rake" then
   require "koala"
   gem     "json", "~>1.4.6"
   require "./lib/facebook"
-  require "./lib/gtsroute"
+  require "./lib/routes/gts"
+  require "./lib/routes/trainer"
+  require "./lib/routes/system"
   require "haml"
   require "sass"
 end
@@ -27,7 +29,7 @@ require "./lib/poketext"
 require "./lib/pokedex"
 
 
-DataMapper.setup(:default, "sqlite:./pokegts.db")
-DataMapper.setup(:pokedex, "sqlite:./pokedex.db")
+DataMapper.setup(:default, GTS.gtsdb)
+DataMapper.setup(:pokedex, GTS.pokedexdb)
 
 DataMapper.auto_upgrade!
