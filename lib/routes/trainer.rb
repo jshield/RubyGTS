@@ -81,11 +81,11 @@ end
 
 get "/trainer/:t/pokemon/:p" do  
   @pkm = Trainer.first(:id=>params[:t]).monsters.first(:id=>params[:p])
-  if @pkm.trainer.id == @trainer.id
-    haml :pokeedit
-  else
+#  if @pkm.trainer.id == @trainer.id
+#    haml :pokeedit
+#  else
     haml :pokemon
-  end
+#  end
 end
 
 get "/trainer/:t/pokemon/:p/delete" do

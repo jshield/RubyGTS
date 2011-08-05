@@ -1,5 +1,11 @@
 get "/system/search/:model" do
-  Kernel.const_get(params[:model].capitalize).all(:name.like=>"%#{params[:term]}%").to_json
+  model = nil
+  case params[:model]
+    when "pokemon"
+      model = "PokemonName"
+  end
+  return [nil].to_json if model.nil? 
+  Kernel.const_get(model).all(:name.like=>"%#{params[:term]}%",:local_language_id=>9).to_json
 end
 
 post "/system/pokemon/:p/ev" do

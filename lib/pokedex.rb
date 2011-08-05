@@ -12,7 +12,7 @@ class Pokemon
   property :form, String, :field => "forme_name"
   
   def name
-    return PokemonName.first(:pokemon_id=>self.id,:local_language_id=>"9").name
+    return PokemonName.first(:id=>self.id,:local_language_id=>"9").name
   end
 end
 
@@ -37,7 +37,7 @@ class PokemonName
 
   storage_names[:pokedex] = "pokemon_names"
 
-  property :pokemon_id, Integer, :key => true
+  property :id, Integer, :field => "pokemon_id", :key => true
   property :local_language_id, Integer, :key => true
   property :name, String
   
@@ -51,7 +51,7 @@ class NatureName
 
   storage_names[:pokedex] = "nature_names"
 
-  property :nature_id, Integer, :key => true
+  property :id, Integer, :field => "nature_id", :key => true
   property :local_language_id, Integer, :key => true
   property :name, String
   
@@ -93,7 +93,7 @@ class Nature
   property :stati, Integer, :field => "increased_stat_id"
 
   def name
-    return NatureName.first(:nature_id=>self.id,:local_language_id=>9).name
+    return NatureName.first(:id=>self.id,:local_language_id=>9).name
   end
 
   def dstat
