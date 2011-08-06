@@ -57,7 +57,19 @@ class NatureName
   
 end
 
+class MoveName
+  include DataMapper::Resource
+  def self.default_repository_name
+    :pokedex
+  end
 
+  storage_names[:pokedex] = "move_names"
+
+  property :id, Integer, :field => "move_id", :key => true
+  property :local_language_id, Integer, :key => true
+  property :name, String
+  
+end
 
 class Item
   include DataMapper::Resource
@@ -66,7 +78,25 @@ class Item
   end
   
   property :id, Serial
-  property :name, String, :field => "identifier"
+  property :identifier, String
+  
+  def name
+    return ItemName.first(:id=>self.id,:local_language_id=>9).name
+  end  
+end
+
+class ItemName
+  include DataMapper::Resource
+  def self.default_repository_name
+    :pokedex
+  end
+
+  storage_names[:pokedex] = "item_names"
+
+  property :id, Integer, :field => "item_id", :key => true
+  property :local_language_id, Integer, :key => true
+  property :name, String
+  
 end
 
 class Move
@@ -76,7 +106,11 @@ class Move
   end
   
   property :id, Serial
-  property :name, String, :field => "identifier"
+  property :identifier, String
+  
+  def name
+    return MoveName.first(:id=>self.id,:local_language_id=>9).name
+  end
 end
 
 class Nature
